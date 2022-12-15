@@ -2,18 +2,18 @@
 import sys;
 
 fileInName = sys.argv[1]
-fileIn = open(fileInName, "rw")
-strIn = fileIn.read()
+with open(fileInName, 'r+') as fileIn:
+    strIn = fileIn.read()
 
-searchStr = "</script>"
-startPos = strIn.rfind(searchStr)
-if (startPos > 0):
-        
-    chunk = strIn[startPos: startPos + 9]
-    targetPos = startPos + len(searchStr)
-    strInsert = '''
+    searchStr = "</script>"
+    startPos = strIn.rfind(searchStr)
+    if (startPos > 0):
+            
+        chunk = strIn[startPos: startPos + 9]
+        targetPos = startPos + len(searchStr)
+        strInsert = '''
 
-    <script>
+<script>
     var _hmt = _hmt || [];
     (function() {
     var hm = document.createElement("script");
@@ -21,13 +21,15 @@ if (startPos > 0):
     var s = document.getElementsByTagName("script")[0]; 
     s.parentNode.insertBefore(hm, s);
     })();
-    </script>
+</script>
 
-    '''
-    resultStr = strIn[:targetPos] + strInsert + strIn[targetPos:]
-    # print resultStr
-    fileIn.write(resultStr)
-else:
-    print "no script"
+        '''
+        resultStr = strIn[:targetPos] + strInsert + strIn[targetPos:]
+        # print resultStr
+        fileIn.seek(0)
+        fileIn.write(resultStr)
+        fileIn.truncate()
+    else:
+        print "no script"
 
-fileIn.close()
+    fileIn.close()
