@@ -1,0 +1,22 @@
+{
+  "name": "test-replace-shell",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "bash ./other/start-list-file.sh",
+    "start-main": "bash ./start.sh",
+    "start-list-file": "bash ./other/start-list-file.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michael-nhat/sh-replace-file.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michael-nhat/sh-replace-file/issues"
+  },
+  "homepage": "https://github.com/michael-nhat/sh-replace-file#readme"
+}
