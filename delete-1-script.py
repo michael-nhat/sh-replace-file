@@ -11,16 +11,18 @@ with open(fileInName, 'r+') as fileIn:
 
     r1 = re.findall(regexStart, strIn)
     r2 = re.findall(regexEnd, strIn)
+    if (len(r1) > 1 and len(r2) > 1):
+        firstPosStr = r1[0]
+        secondPosStr = r2[0]
 
-    firstPosStr = r1[0]
-    secondPosStr = r2[0]
-
-    firstPos = strIn.find(firstPosStr);
-    secondPos = strIn.find(secondPosStr) + len(secondPosStr);
-    resultStr = strIn[:firstPos - 1] + strIn[secondPos+1:]
-    # print resultStr
-    fileIn.seek(0)
-    fileIn.write(resultStr)
-    fileIn.truncate()
+        firstPos = strIn.find(firstPosStr);
+        secondPos = strIn.find(secondPosStr) + len(secondPosStr);
+        resultStr = strIn[:firstPos - 1] + strIn[secondPos+1:]
+        # print resultStr
+        fileIn.seek(0)
+        fileIn.write(resultStr)
+        fileIn.truncate()
+    else:
+        print "script repeat but commented"
 
     fileIn.close()

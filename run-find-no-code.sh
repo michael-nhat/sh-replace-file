@@ -8,7 +8,8 @@ find-no-code () {
             ./delete-1-script.py $1; 
             ./awk-replace.awk $1  | sponge $1;
         else
-        echo "has right script: $1";
+        true;
+        # echo "has right script: $1";
         fi
     else if grep -q 'hm.src =' "$1"; then
         echo "has script but no right code: $1";
@@ -21,5 +22,5 @@ find-no-code () {
     fi
 }
 
-count=0; find $(pwd) -name "*.html" | while read i; do count=$((count+1));  echo $count; find-no-code $i; done
+count=0; find $1 -name "*.html" | while read i; do count=$((count+1));  echo $count; find-no-code $i; done
 
