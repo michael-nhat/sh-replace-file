@@ -3,9 +3,20 @@ import os
 import sys
 import grp
 import pwd
+import glob
+import subprocess
+import file_util as fu
 
 filename =  sys.argv[1]
-import glob
+homedir = sys.argv[2]
+# print(homedir)
+
+filename_stat = os.stat(filename)
+# overwrite
+f = open(homedir + "/list-need-fix.txt", "w")
+# f.write("abc")
+# put side affect only at control 
+
 # Recursively fetch all txt files from given path
 # for filepath in glob.iglob(filename , recursive=True):
 #  print(filepath)
@@ -16,48 +27,45 @@ import glob
 
 # print(filename)
 
-# 
-def find_path(dir_):
-    for root, folders, names in os.walk(dir_):
-        print(folders)
-        for name in names:
-            print(name)
-            if name.endswith(".html"):
-                # Your code
-                pass
+# set_permission(filename)
 
-def find_loop(dir):
-    for dirpath, dirs, files in os.walk(dir): 
-        for filename in files:
-            fname = os.path.join(dirpath,filename)
-            # if (fname.endswith('.php')
-            #     or fname.endswith(".html")
-            #     or fname.endswith(".htm")):
-            #     print(fname)
-            print(fname)
-            
+# set_permission(file1)
 
-# find_path(filename)
-# find_loop(filename)
-def get_owner(stat_info):
-    uid = stat_info.st_uid
-    owner = pwd.getpwuid(uid)[0]
-    return owner
+# mask = oct(os.stat(file1).st_mode)[-3:]
 
-def get_group(stat_info):
-    gid = stat_info.st_gid
-    group = grp.getgrgid(gid)[0]
-    return group
+# Print the mask
+# print(file1)
 
-stat_info = os.stat(filename)
+print("File permission mask:"
+      , fu.check_permission(filename_stat)
+      , fu.get_permission_mask_code(filename_stat))
 
-uid = pwd.getpwnam("www").pw_uid
-gid = grp.getgrnam("www").gr_gid
+# stat_info = os.stat(filename)
 
-print uid, gid
-os.chown(filename + "/text_test.html", uid, gid)
-# os.chown("filename + "/text_test.html"", uid, gid)
+# uid = pwd.getpwnam("www").pw_uid
+# gid = grp.getgrnam("www").gr_gid
 
+# print(uid, gid)
+
+# os.chown(file1, uid, gid)
+
+# # print(stat_info)
+# # print(file1)
+
+# os.chown(filename + "/text_test.html", uid, gid)
+# p = subprocess.Popen("chgrp root " + file1, stdout=subprocess.PIPE, shell=True,
+#                      executable="/bin/bash")
+
+# print(p.communicate())
+
+
+# p = subprocess.Popen("ls -la " + file1, stdout=subprocess.PIPE, shell=True,
+#                      executable="/bin/bash")
+
+# print(p.communicate())
+
+# info1 = os.stat(file1)
+# print(get_group(info1), get_owner(info1))
 
 # stat_info = os.stat(filename)
 # uid = stat_info.st_uid
@@ -67,3 +75,33 @@ os.chown(filename + "/text_test.html", uid, gid)
 # user = pwd.getpwuid(uid)[0]
 # group = grp.getgrgid(gid)[0]
 # print user, group
+
+# with ntfs share, chmod, chgr don't work
+
+            # unless check correct owner, group permisstion, set
+            # unless check correct permission, set
+            # print(fname)
+
+def find_loop(dir):
+    for dirpath, dirs, files in os.walk(dir): 
+        d_stat = os.stat(dirpath)
+        if not (fu.check_permission(d_stat)
+                and fu.check_owner_group(d_stat)):
+            print(dirpath + "/")
+            f.write(dirpath + "/" +"\n")
+        for filename in files:
+            fname = os.path.join(dirpath, filename)
+            f_stat = os.stat(fname)
+            if fu.find_type_check(fname):
+                if not (fu.check_owner_group(f_stat)
+                    and fu.check_permission(f_stat)):
+                    print(fname)
+                    f.write(fname + "\n")
+
+find_loop(filename)
+print(1)
+
+# run sudo, so he is root, home is /root
+# print(os.getenv("HOME"))
+
+f.close()
