@@ -15,7 +15,7 @@ filename_stat = os.stat(filename)
 # overwrite
 f = open(homedir + "/list-need-fix.txt", "w")
 # f.write("abc")
-# put side affect only at control 
+# put side affect only at control
 
 # Recursively fetch all txt files from given path
 # for filepath in glob.iglob(filename , recursive=True):
@@ -87,6 +87,7 @@ def find_loop(dir):
         d_stat = os.stat(dirpath)
         if not (fu.check_permission(d_stat)
                 and fu.check_owner_group(d_stat)):
+            # mark it as dir
             print(dirpath + "/")
             f.write(dirpath + "/" +"\n")
         for filename in files:

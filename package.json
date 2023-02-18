@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "bash ./other/start-list-file.sh",
+    "start": "bash ./yan/replace.sh",
+    "start-grep-multi": "bash ./yan/replace.sh",
     "start-main": "bash ./start.sh",
     "start-list-file": "bash ./other/start-list-file.sh"
   },
